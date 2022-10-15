@@ -16,7 +16,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Builder(builder: (context) {
+        return Scaffold(
+          body: Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => MyHomePage(title: 'title')),
+                );
+              },
+              child: Text('Go'),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
@@ -32,12 +45,29 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    print(AnimationLimiter.shouldRunAnimation(context).toString());
     return Scaffold(
-      body: AnimatedListViewWrapper(
-        children: const [
-          Text('Hello'),
-          Text('World'),
-        ],
+      body: AnimatedListView(
+        transitionBuilder: (ctx, animation, child) => SlideTransition(
+          position: Tween(begin: const Offset(-1, 0), end: Offset.zero)
+              .animate(animation),
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
+        delay: kThemeChangeDuration,
+        duration: const Duration(milliseconds: 700),
+        children: Colors.primaries
+            .map(
+              (e) => Container(
+                margin: EdgeInsets.all(16),
+                color: e,
+                height: 100,
+                width: double.maxFinite,
+              ),
+            )
+            .toList(),
       ),
     );
   }

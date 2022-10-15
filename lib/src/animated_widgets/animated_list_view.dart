@@ -1,4 +1,8 @@
-import 'animation_limiter.dart';
+import 'package:animated_multichild/src/configurations/animation_container.dart';
+import 'package:animated_multichild/src/utils/constants.dart';
+
+import '../configurations/animation_limiter.dart';
+import '../utils/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +32,12 @@ class AnimatedListView extends StatelessWidget {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
+    Duration duration = kThemeAnimationDuration,
+    Curve curve = Curves.linear,
+    Duration delay = Duration.zero,
+    Widget Function(
+            BuildContext context, Animation<double> animation, Widget child)
+        transitionBuilder = defaultTransitionBuilder,
   }) : _instance = _DefaultListViewData(
           scrollDirection: scrollDirection,
           reverse: reverse,
@@ -48,6 +58,10 @@ class AnimatedListView extends StatelessWidget {
           restorationId: restorationId,
           shrinkWrap: shrinkWrap,
           dragStartBehavior: dragStartBehaviour,
+          duration: duration,
+          delay: delay,
+          curve: curve,
+          transitionBuilder: transitionBuilder,
         );
 
   AnimatedListView.builder({
@@ -74,6 +88,12 @@ class AnimatedListView extends StatelessWidget {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
+    Duration duration = kThemeAnimationDuration,
+    Curve curve = Curves.linear,
+    Duration delay = Duration.zero,
+    Widget Function(
+            BuildContext context, Animation<double> animation, Widget child)
+        transitionBuilder = defaultTransitionBuilder,
   }) : _instance = _BuilderListViewData(
           scrollDirection: scrollDirection,
           reverse: reverse,
@@ -96,7 +116,12 @@ class AnimatedListView extends StatelessWidget {
           keyboardDismissBehavior: keyboardDismissBehavior,
           restorationId: restorationId,
           clipBehavior: clipBehavior,
+          duration: duration,
+          curve: curve,
+          delay: delay,
+          transitionBuilder: transitionBuilder,
         );
+
   AnimatedListView.separated({
     super.key,
     Axis scrollDirection = Axis.vertical,
@@ -119,6 +144,12 @@ class AnimatedListView extends StatelessWidget {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
+    Duration duration = kThemeAnimationDuration,
+    Curve curve = Curves.linear,
+    Duration delay = Duration.zero,
+    Widget Function(
+            BuildContext context, Animation<double> animation, Widget child)
+        transitionBuilder = defaultTransitionBuilder,
   }) : _instance = _SeparatedListViewData(
           scrollDirection: scrollDirection,
           reverse: reverse,
@@ -139,6 +170,10 @@ class AnimatedListView extends StatelessWidget {
           keyboardDismissBehavior: keyboardDismissBehavior,
           restorationId: restorationId,
           clipBehavior: clipBehavior,
+          duration: duration,
+          curve: curve,
+          delay: delay,
+          transitionBuilder: transitionBuilder,
         );
 
   final AnimatedListViewData _instance;
@@ -175,6 +210,10 @@ class AnimatedListView extends StatelessWidget {
         keyboardDismissBehavior: data.keyboardDismissBehavior,
         restorationId: data.restorationId,
         clipBehavior: data.clipBehavior,
+        duration: data.duration,
+        delay: data.delay,
+        curve: data.curve,
+        transitionBuilder: data.transitionBuilder,
       );
     }
 
@@ -203,6 +242,10 @@ class AnimatedListView extends StatelessWidget {
         keyboardDismissBehavior: data.keyboardDismissBehavior,
         restorationId: data.restorationId,
         clipBehavior: data.clipBehavior,
+        duration: data.duration,
+        delay: data.delay,
+        curve: data.curve,
+        transitionBuilder: data.transitionBuilder,
       );
     }
 
@@ -227,6 +270,11 @@ class AnimatedListView extends StatelessWidget {
       keyboardDismissBehavior: data.keyboardDismissBehavior,
       restorationId: data.restorationId,
       clipBehavior: data.clipBehavior,
+      duration: data.duration,
+      delay: data.delay,
+      curve: data.curve,
+      transitionBuilder: data.transitionBuilder,
+      children: data.children,
     );
   }
 }
@@ -248,6 +296,13 @@ abstract class AnimatedListViewData {
   final String? restorationId;
   final Clip clipBehavior;
 
+  final Duration duration;
+  final Duration delay;
+  final Curve curve;
+  final Widget Function(
+          BuildContext context, Animation<double> animation, Widget child)
+      transitionBuilder;
+
   const AnimatedListViewData({
     required this.scrollDirection,
     required this.reverse,
@@ -264,6 +319,10 @@ abstract class AnimatedListViewData {
     required this.keyboardDismissBehavior,
     required this.restorationId,
     required this.clipBehavior,
+    required this.duration,
+    required this.delay,
+    required this.curve,
+    required this.transitionBuilder,
   });
 }
 
@@ -288,6 +347,10 @@ class _DefaultListViewData extends AnimatedListViewData {
     required this.itemExtent,
     required this.prototypeItem,
     required this.children,
+    required super.duration,
+    required super.curve,
+    required super.delay,
+    required super.transitionBuilder,
   });
 
   final double? itemExtent;
@@ -319,6 +382,10 @@ class _BuilderListViewData extends AnimatedListViewData {
     required super.keyboardDismissBehavior,
     required super.restorationId,
     required super.clipBehavior,
+    required super.duration,
+    required super.curve,
+    required super.delay,
+    required super.transitionBuilder,
   });
 
   final double? itemExtent;
@@ -350,6 +417,10 @@ class _SeparatedListViewData extends AnimatedListViewData {
     required super.keyboardDismissBehavior,
     required super.restorationId,
     required super.clipBehavior,
+    required super.duration,
+    required super.curve,
+    required super.delay,
+    required super.transitionBuilder,
   });
 
   final IndexedWidgetBuilder itemBuilder;
@@ -359,27 +430,6 @@ class _SeparatedListViewData extends AnimatedListViewData {
 }
 
 class AnimatedListViewWrapper extends BoxScrollView {
-  /// Creates a scrollable, linear array of widgets from an explicit [List].
-  ///
-  /// This constructor is appropriate for list views with a small number of
-  /// children because constructing the [List] requires doing work for every
-  /// child that could possibly be displayed in the list view instead of just
-  /// those children that are actually visible.
-  ///
-  /// Like other widgets in the framework, this widget expects that
-  /// the [children] list will not be mutated after it has been passed in here.
-  /// See the documentation at [SliverChildListDelegate.children] for more details.
-  ///
-  /// It is usually more efficient to create children on demand using
-  /// [ListView.builder] because it will create the widget children lazily as necessary.
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildListDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildListDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildListDelegate.addSemanticIndexes] property. None
-  /// may be null.
   AnimatedListViewWrapper({
     super.key,
     super.scrollDirection,
@@ -401,17 +451,27 @@ class AnimatedListViewWrapper extends BoxScrollView {
     super.keyboardDismissBehavior,
     super.restorationId,
     super.clipBehavior,
+    required this.duration,
+    required this.delay,
+    required this.curve,
+    required this.transitionBuilder,
   })  : assert(
           itemExtent == null || prototypeItem == null,
           'You can only pass itemExtent or prototypeItem, not both.',
         ),
         childrenDelegate = SliverChildListDelegate(
           children
-              .map((e) => Container(
-                    color: Colors.grey,
-                    padding: const EdgeInsets.all(20),
-                    child: e,
-                  ))
+              .mapIndexed(
+                (e, index) => AnimationContainer(
+                  builder: (BuildContext context, Animation<double> animation) {
+                    return transitionBuilder(
+                        context, animation, children[index]);
+                  },
+                  delay: delay * index,
+                  duration: duration,
+                  curve: curve,
+                ),
+              )
               .toList(),
           addAutomaticKeepAlives: addAutomaticKeepAlive,
           addRepaintBoundaries: addRepaintBoundaries,
@@ -421,35 +481,6 @@ class AnimatedListViewWrapper extends BoxScrollView {
           semanticChildCount: semanticChildCount ?? children.length,
         );
 
-  /// Creates a scrollable, linear array of widgets that are created on demand.
-  ///
-  /// This constructor is appropriate for list views with a large (or infinite)
-  /// number of children because the builder is called only for those children
-  /// that are actually visible.
-  ///
-  /// Providing a non-null `itemCount` improves the ability of the [ListView] to
-  /// estimate the maximum scroll extent.
-  ///
-  /// The `itemBuilder` callback will be called only with indices greater than
-  /// or equal to zero and less than `itemCount`.
-  ///
-  /// The `itemBuilder` should always return a non-null widget, and actually
-  /// create the widget instances when called. Avoid using a builder that
-  /// returns a previously-constructed widget; if the list view's children are
-  /// created in advance, or all at once when the [ListView] itself is created,
-  /// it is more efficient to use the [ListView] constructor. Even more
-  /// efficient, however, is to create the instances on demand using this
-  /// constructor's `itemBuilder` callback.
-  ///
-  /// {@macro flutter.widgets.PageView.findChildIndexCallback}
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property. None may be
-  /// null.
   AnimatedListViewWrapper.builder({
     super.key,
     super.scrollDirection,
@@ -473,6 +504,10 @@ class AnimatedListViewWrapper extends BoxScrollView {
     super.keyboardDismissBehavior,
     super.restorationId,
     super.clipBehavior,
+    required this.duration,
+    required this.delay,
+    required this.curve,
+    required this.transitionBuilder,
   })  : assert(itemCount == null || itemCount >= 0),
         assert(semanticChildCount == null || semanticChildCount <= itemCount!),
         assert(
@@ -491,55 +526,6 @@ class AnimatedListViewWrapper extends BoxScrollView {
           semanticChildCount: semanticChildCount ?? itemCount,
         );
 
-  /// Creates a fixed-length scrollable linear array of list "items" separated
-  /// by list item "separators".
-  ///
-  /// This constructor is appropriate for list views with a large number of
-  /// item and separator children because the builders are only called for
-  /// the children that are actually visible.
-  ///
-  /// The `itemBuilder` callback will be called with indices greater than
-  /// or equal to zero and less than `itemCount`.
-  ///
-  /// Separators only appear between list items: separator 0 appears after item
-  /// 0 and the last separator appears before the last item.
-  ///
-  /// The `separatorBuilder` callback will be called with indices greater than
-  /// or equal to zero and less than `itemCount - 1`.
-  ///
-  /// The `itemBuilder` and `separatorBuilder` callbacks should always return a
-  /// non-null widget, and actually create widget instances when called. Avoid
-  /// using a builder that returns a previously-constructed widget; if the list
-  /// view's children are created in advance, or all at once when the [ListView]
-  /// itself is created, it is more efficient to use the [ListView] constructor.
-  ///
-  /// {@macro flutter.widgets.PageView.findChildIndexCallback}
-  ///
-  /// {@tool snippet}
-  ///
-  /// This example shows how to create [ListView] whose [ListTile] list items
-  /// are separated by [Divider]s.
-  ///
-  /// ```dart
-  /// ListView.separated(
-  ///   itemCount: 25,
-  ///   separatorBuilder: (BuildContext context, int index) => const Divider(),
-  ///   itemBuilder: (BuildContext context, int index) {
-  ///     return ListTile(
-  ///       title: Text('item $index'),
-  ///     );
-  ///   },
-  /// )
-  /// ```
-  /// {@end-tool}
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property. None may be
-  /// null.
   AnimatedListViewWrapper.separated({
     super.key,
     super.scrollDirection,
@@ -561,6 +547,10 @@ class AnimatedListViewWrapper extends BoxScrollView {
     super.keyboardDismissBehavior,
     super.restorationId,
     super.clipBehavior,
+    required this.duration,
+    required this.delay,
+    required this.curve,
+    required this.transitionBuilder,
   })  : assert(itemCount >= 0),
         itemExtent = null,
         prototypeItem = null,
@@ -594,160 +584,17 @@ class AnimatedListViewWrapper extends BoxScrollView {
           semanticChildCount: itemCount,
         );
 
-  /// Creates a scrollable, linear array of widgets with a custom child model.
-  ///
-  /// For example, a custom child model can control the algorithm used to
-  /// estimate the size of children that are not actually visible.
-  ///
-  /// {@tool snippet}
-  ///
-  /// This [ListView] uses a custom [SliverChildBuilderDelegate] to support child
-  /// reordering.
-  ///
-  /// ```dart
-  /// class MyListView extends StatefulWidget {
-  ///   const MyListView({super.key});
-  ///
-  ///   @override
-  ///   State<MyListView> createState() => _MyListViewState();
-  /// }
-  ///
-  /// class _MyListViewState extends State<MyListView> {
-  ///   List<String> items = <String>['1', '2', '3', '4', '5'];
-  ///
-  ///   void _reverse() {
-  ///     setState(() {
-  ///       items = items.reversed.toList();
-  ///     });
-  ///   }
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Scaffold(
-  ///       body: SafeArea(
-  ///         child: ListView.custom(
-  ///           childrenDelegate: SliverChildBuilderDelegate(
-  ///             (BuildContext context, int index) {
-  ///               return KeepAlive(
-  ///                 data: items[index],
-  ///                 key: ValueKey<String>(items[index]),
-  ///               );
-  ///             },
-  ///             childCount: items.length,
-  ///             findChildIndexCallback: (Key key) {
-  ///               final ValueKey<String> valueKey = key as ValueKey<String>;
-  ///               final String data = valueKey.value;
-  ///               return items.indexOf(data);
-  ///             }
-  ///           ),
-  ///         ),
-  ///       ),
-  ///       bottomNavigationBar: BottomAppBar(
-  ///         child: Row(
-  ///           mainAxisAlignment: MainAxisAlignment.center,
-  ///           children: <Widget>[
-  ///             TextButton(
-  ///               onPressed: () => _reverse(),
-  ///               child: const Text('Reverse items'),
-  ///             ),
-  ///           ],
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  ///
-  /// class KeepAlive extends StatefulWidget {
-  ///   const KeepAlive({
-  ///     required Key key,
-  ///     required this.data,
-  ///   }) : super(key: key);
-  ///
-  ///   final String data;
-  ///
-  ///   @override
-  ///   State<KeepAlive> createState() => _KeepAliveState();
-  /// }
-  ///
-  /// class _KeepAliveState extends State<KeepAlive> with AutomaticKeepAliveClientMixin{
-  ///   @override
-  ///   bool get wantKeepAlive => true;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     super.build(context);
-  ///     return Text(widget.data);
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
-  // const AnimatedListView.custom({
-  //   super.key,
-  //   super.scrollDirection,
-  //   super.reverse,
-  //   super.controller,
-  //   super.primary,
-  //   super.physics,
-  //   super.shrinkWrap,
-  //   super.padding,
-  //   this.itemExtent,
-  //   this.prototypeItem,
-  //   required this.childrenDelegate,
-  //   super.cacheExtent,
-  //   super.semanticChildCount,
-  //   super.dragStartBehavior,
-  //   super.keyboardDismissBehavior,
-  //   super.restorationId,
-  //   super.clipBehavior,
-  // }) : assert(
-  //       itemExtent == null || prototypeItem == null,
-  //       'You can only pass itemExtent or prototypeItem, not both',
-  //       );
-
-  /// {@template flutter.widgets.list_view.itemExtent}
-  /// If non-null, forces the children to have the given extent in the scroll
-  /// direction.
-  ///
-  /// Specifying an [itemExtent] is more efficient than letting the children
-  /// determine their own extent because the scrolling machinery can make use of
-  /// the foreknowledge of the children's extent to save work, for example when
-  /// the scroll position changes drastically.
-  ///
-  /// See also:
-  ///
-  ///  * [SliverFixedExtentList], the sliver used internally when this property
-  ///    is provided. It constrains its box children to have a specific given
-  ///    extent along the main axis.
-  ///  * The [prototypeItem] property, which allows forcing the children's
-  ///    extent to be the same as the given widget.
-  /// {@endtemplate}
   final double? itemExtent;
 
-  /// {@template flutter.widgets.list_view.prototypeItem}
-  /// If non-null, forces the children to have the same extent as the given
-  /// widget in the scroll direction.
-  ///
-  /// Specifying an [prototypeItem] is more efficient than letting the children
-  /// determine their own extent because the scrolling machinery can make use of
-  /// the foreknowledge of the children's extent to save work, for example when
-  /// the scroll position changes drastically.
-  ///
-  /// See also:
-  ///
-  ///  * [SliverPrototypeExtentList], the sliver used internally when this
-  ///    property is provided. It constrains its box children to have the same
-  ///    extent as a prototype item along the main axis.
-  ///  * The [itemExtent] property, which allows forcing the children's extent
-  ///    to a given value.
-  /// {@endtemplate}
   final Widget? prototypeItem;
 
-  /// A delegate that provides the children for the [ListView].
-  ///
-  /// The [ListView.custom] constructor lets you specify this delegate
-  /// explicitly. The [ListView] and [ListView.builder] constructors create a
-  /// [childrenDelegate] that wraps the given [List] and [IndexedWidgetBuilder],
-  /// respectively.
+  final Duration duration;
+  final Duration delay;
+  final Curve curve;
+  final Widget Function(
+          BuildContext context, Animation<double> animation, Widget child)
+      transitionBuilder;
+
   final SliverChildDelegate childrenDelegate;
 
   @override

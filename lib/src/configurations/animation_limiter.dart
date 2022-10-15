@@ -11,7 +11,7 @@ class AnimationLimiter extends StatefulWidget {
   State<AnimationLimiter> createState() => _AnimationLimiterState();
 
   static bool shouldRunAnimation(BuildContext context) =>
-      _AnimationLimiterProvider.of(context)?.shouldRunAnimation ?? false;
+      _AnimationLimiterProvider.of(context)?.shouldRunAnimation ?? true;
 }
 
 class _AnimationLimiterState extends State<AnimationLimiter> {
@@ -20,10 +20,12 @@ class _AnimationLimiterState extends State<AnimationLimiter> {
   @override
   void initState() {
     super.initState();
+    print('Start ${DateTime.now()}');
     WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       if (!mounted) return;
       setState(() {
         _limitAnimation = widget.limit;
+        print('set limit at ${DateTime.now()}');
       });
     });
   }
@@ -31,7 +33,7 @@ class _AnimationLimiterState extends State<AnimationLimiter> {
   @override
   Widget build(BuildContext context) {
     return _AnimationLimiterProvider(
-      shouldRunAnimation: _limitAnimation,
+      shouldRunAnimation: !_limitAnimation,
       child: widget.child,
     );
   }

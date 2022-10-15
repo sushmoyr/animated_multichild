@@ -46,14 +46,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedListView.separated(
-        transitionBuilder: Transitions.combine([
-          // Transitions.slideInFromLeft,
-          Transitions.fadeIn,
-          Transitions.slideInFromBottom,
-        ]),
-        delay: kThemeChangeDuration,
-        curve: Curves.decelerate,
+      body: AnimatedListView.builder(
+        indexedChildTransitionBuilder: (context, animation, child, index) {
+          return index.isEven
+              ? Transitions.slideInFromLeft(context, animation, child)
+              : Transitions.slideInFromRight(context, animation, child);
+        },
+        delay: Duration.zero,
+        curve: Curves.ease,
         duration: const Duration(milliseconds: 300),
         itemBuilder: (BuildContext context, int index) {
           return Container(
@@ -64,9 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         },
         itemCount: Colors.primaries.length,
-        separatorBuilder: (BuildContext context, int index) {
-          return Text('I am separator');
-        },
+        // separatorBuilder: (BuildContext context, int index) {
+        //   return Text('I am separator');
+        // },
       ),
     );
   }

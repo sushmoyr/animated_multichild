@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:math' as math;
+import 'animated_list_wrapper.dart';
 
 class AnimatedListView extends StatelessWidget {
   AnimatedListView({
@@ -35,9 +35,8 @@ class AnimatedListView extends StatelessWidget {
     Duration duration = kThemeAnimationDuration,
     Curve curve = Curves.linear,
     Duration delay = Duration.zero,
-    Widget Function(
-            BuildContext context, Animation<double> animation, Widget child)
-        transitionBuilder = defaultTransitionBuilder,
+    ChildTransitionBuilder transitionBuilder = defaultTransitionBuilder,
+    IndexedChildTransitionBuilder? indexedChildTransitionBuilder,
   }) : _instance = _DefaultListViewData(
           scrollDirection: scrollDirection,
           reverse: reverse,
@@ -62,6 +61,7 @@ class AnimatedListView extends StatelessWidget {
           delay: delay,
           curve: curve,
           transitionBuilder: transitionBuilder,
+          indexedChildTransitionBuilder: indexedChildTransitionBuilder,
         );
 
   AnimatedListView.builder({
@@ -91,9 +91,8 @@ class AnimatedListView extends StatelessWidget {
     Duration duration = kThemeAnimationDuration,
     Curve curve = Curves.linear,
     Duration delay = Duration.zero,
-    Widget Function(
-            BuildContext context, Animation<double> animation, Widget child)
-        transitionBuilder = defaultTransitionBuilder,
+    ChildTransitionBuilder transitionBuilder = defaultTransitionBuilder,
+    IndexedChildTransitionBuilder? indexedChildTransitionBuilder,
   }) : _instance = _BuilderListViewData(
           scrollDirection: scrollDirection,
           reverse: reverse,
@@ -120,6 +119,7 @@ class AnimatedListView extends StatelessWidget {
           curve: curve,
           delay: delay,
           transitionBuilder: transitionBuilder,
+          indexedChildTransitionBuilder: indexedChildTransitionBuilder,
         );
 
   AnimatedListView.separated({
@@ -147,9 +147,8 @@ class AnimatedListView extends StatelessWidget {
     Duration duration = kThemeAnimationDuration,
     Curve curve = Curves.linear,
     Duration delay = Duration.zero,
-    Widget Function(
-            BuildContext context, Animation<double> animation, Widget child)
-        transitionBuilder = defaultTransitionBuilder,
+    ChildTransitionBuilder transitionBuilder = defaultTransitionBuilder,
+    IndexedChildTransitionBuilder? indexedChildTransitionBuilder,
   }) : _instance = _SeparatedListViewData(
           scrollDirection: scrollDirection,
           reverse: reverse,
@@ -174,10 +173,11 @@ class AnimatedListView extends StatelessWidget {
           curve: curve,
           delay: delay,
           transitionBuilder: transitionBuilder,
+          indexedChildTransitionBuilder: indexedChildTransitionBuilder,
         );
 
   final AnimatedListViewData _instance;
-  //TODO: Add option for animation limiter, animation configuration
+  //TODO: Add option for animation limiter
 
   @override
   Widget build(BuildContext context) {
@@ -214,6 +214,7 @@ class AnimatedListView extends StatelessWidget {
         delay: data.delay,
         curve: data.curve,
         transitionBuilder: data.transitionBuilder,
+        indexedChildTransitionBuilder: data.indexedChildTransitionBuilder,
       );
     }
 
@@ -246,6 +247,7 @@ class AnimatedListView extends StatelessWidget {
         delay: data.delay,
         curve: data.curve,
         transitionBuilder: data.transitionBuilder,
+        indexedChildTransitionBuilder: data.indexedChildTransitionBuilder,
       );
     }
 
@@ -274,6 +276,7 @@ class AnimatedListView extends StatelessWidget {
       delay: data.delay,
       curve: data.curve,
       transitionBuilder: data.transitionBuilder,
+      indexedChildTransitionBuilder: data.indexedChildTransitionBuilder,
       children: data.children,
     );
   }
@@ -299,9 +302,8 @@ abstract class AnimatedListViewData {
   final Duration duration;
   final Duration delay;
   final Curve curve;
-  final Widget Function(
-          BuildContext context, Animation<double> animation, Widget child)
-      transitionBuilder;
+  final ChildTransitionBuilder transitionBuilder;
+  final IndexedChildTransitionBuilder? indexedChildTransitionBuilder;
 
   const AnimatedListViewData({
     required this.scrollDirection,
@@ -323,6 +325,7 @@ abstract class AnimatedListViewData {
     required this.delay,
     required this.curve,
     required this.transitionBuilder,
+    this.indexedChildTransitionBuilder,
   });
 }
 
@@ -351,6 +354,7 @@ class _DefaultListViewData extends AnimatedListViewData {
     required super.curve,
     required super.delay,
     required super.transitionBuilder,
+    super.indexedChildTransitionBuilder,
   });
 
   final double? itemExtent;
@@ -386,6 +390,7 @@ class _BuilderListViewData extends AnimatedListViewData {
     required super.curve,
     required super.delay,
     required super.transitionBuilder,
+    super.indexedChildTransitionBuilder,
   });
 
   final double? itemExtent;
@@ -421,217 +426,11 @@ class _SeparatedListViewData extends AnimatedListViewData {
     required super.curve,
     required super.delay,
     required super.transitionBuilder,
+    super.indexedChildTransitionBuilder,
   });
 
   final IndexedWidgetBuilder itemBuilder;
   final ChildIndexGetter? findChildIndexCallback;
   final IndexedWidgetBuilder separatorBuilder;
   final int itemCount;
-}
-
-class AnimatedListViewWrapper extends BoxScrollView {
-  AnimatedListViewWrapper({
-    super.key,
-    super.scrollDirection,
-    super.reverse,
-    super.controller,
-    super.primary,
-    super.physics,
-    super.shrinkWrap,
-    super.padding,
-    this.itemExtent,
-    this.prototypeItem,
-    bool addAutomaticKeepAlive = true,
-    bool addRepaintBoundaries = true,
-    bool addSemanticIndexes = true,
-    super.cacheExtent,
-    List<Widget> children = const <Widget>[],
-    int? semanticChildCount,
-    super.dragStartBehavior,
-    super.keyboardDismissBehavior,
-    super.restorationId,
-    super.clipBehavior,
-    required this.duration,
-    required this.delay,
-    required this.curve,
-    required this.transitionBuilder,
-  })  : assert(
-          itemExtent == null || prototypeItem == null,
-          'You can only pass itemExtent or prototypeItem, not both.',
-        ),
-        childrenDelegate = SliverChildListDelegate(
-          children
-              .mapIndexed(
-                (e, index) => AnimationContainer(
-                  builder: (BuildContext context, Animation<double> animation) {
-                    return transitionBuilder(
-                        context, animation, children[index]);
-                  },
-                  delay: delay * index,
-                  duration: duration,
-                  curve: curve,
-                ),
-              )
-              .toList(),
-          addAutomaticKeepAlives: addAutomaticKeepAlive,
-          addRepaintBoundaries: addRepaintBoundaries,
-          addSemanticIndexes: addSemanticIndexes,
-        ),
-        super(
-          semanticChildCount: semanticChildCount ?? children.length,
-        );
-
-  AnimatedListViewWrapper.builder({
-    super.key,
-    super.scrollDirection,
-    super.reverse,
-    super.controller,
-    super.primary,
-    super.physics,
-    super.shrinkWrap,
-    super.padding,
-    this.itemExtent,
-    this.prototypeItem,
-    required IndexedWidgetBuilder itemBuilder,
-    ChildIndexGetter? findChildIndexCallback,
-    int? itemCount,
-    bool addAutomaticKeepAlive = true,
-    bool addRepaintBoundaries = true,
-    bool addSemanticIndexes = true,
-    super.cacheExtent,
-    int? semanticChildCount,
-    super.dragStartBehavior,
-    super.keyboardDismissBehavior,
-    super.restorationId,
-    super.clipBehavior,
-    required this.duration,
-    required this.delay,
-    required this.curve,
-    required this.transitionBuilder,
-  })  : assert(itemCount == null || itemCount >= 0),
-        assert(semanticChildCount == null || semanticChildCount <= itemCount!),
-        assert(
-          itemExtent == null || prototypeItem == null,
-          'You can only pass itemExtent or prototypeItem, not both.',
-        ),
-        childrenDelegate = SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            final Widget child = itemBuilder(context, index);
-            return AnimationContainer(
-              duration: duration,
-              curve: curve,
-              delay: delay * index,
-              builder: (BuildContext context, Animation<double> animation) {
-                return transitionBuilder(context, animation, child);
-              },
-            );
-          },
-          findChildIndexCallback: findChildIndexCallback,
-          childCount: itemCount,
-          addAutomaticKeepAlives: addAutomaticKeepAlive,
-          addRepaintBoundaries: addRepaintBoundaries,
-          addSemanticIndexes: addSemanticIndexes,
-        ),
-        super(
-          semanticChildCount: semanticChildCount ?? itemCount,
-        );
-
-  AnimatedListViewWrapper.separated({
-    super.key,
-    super.scrollDirection,
-    super.reverse,
-    super.controller,
-    super.primary,
-    super.physics,
-    super.shrinkWrap,
-    super.padding,
-    required IndexedWidgetBuilder itemBuilder,
-    ChildIndexGetter? findChildIndexCallback,
-    required IndexedWidgetBuilder separatorBuilder,
-    required int itemCount,
-    bool addAutomaticKeepAlives = true,
-    bool addRepaintBoundaries = true,
-    bool addSemanticIndexes = true,
-    super.cacheExtent,
-    super.dragStartBehavior,
-    super.keyboardDismissBehavior,
-    super.restorationId,
-    super.clipBehavior,
-    required this.duration,
-    required this.delay,
-    required this.curve,
-    required this.transitionBuilder,
-  })  : assert(itemCount >= 0),
-        itemExtent = null,
-        prototypeItem = null,
-        childrenDelegate = SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            final int itemIndex = index ~/ 2;
-            final Widget widget;
-            if (index.isEven) {
-              widget = itemBuilder(context, itemIndex);
-            } else {
-              widget = separatorBuilder(context, itemIndex);
-            }
-            return AnimationContainer(
-              duration: duration,
-              curve: curve,
-              delay: delay * itemIndex,
-              builder: (context, animation) =>
-                  transitionBuilder(context, animation, widget),
-            );
-          },
-          findChildIndexCallback: findChildIndexCallback,
-          childCount: _computeActualChildCount(itemCount),
-          addAutomaticKeepAlives: addAutomaticKeepAlives,
-          addRepaintBoundaries: addRepaintBoundaries,
-          addSemanticIndexes: addSemanticIndexes,
-          semanticIndexCallback: (Widget _, int index) {
-            return index.isEven ? index ~/ 2 : null;
-          },
-        ),
-        super(
-          semanticChildCount: itemCount,
-        );
-
-  final double? itemExtent;
-
-  final Widget? prototypeItem;
-
-  final Duration duration;
-  final Duration delay;
-  final Curve curve;
-  final Widget Function(
-          BuildContext context, Animation<double> animation, Widget child)
-      transitionBuilder;
-
-  final SliverChildDelegate childrenDelegate;
-
-  @override
-  Widget buildChildLayout(BuildContext context) {
-    if (itemExtent != null) {
-      return SliverFixedExtentList(
-        delegate: childrenDelegate,
-        itemExtent: itemExtent!,
-      );
-    } else if (prototypeItem != null) {
-      return SliverPrototypeExtentList(
-        delegate: childrenDelegate,
-        prototypeItem: prototypeItem!,
-      );
-    }
-    return SliverList(delegate: childrenDelegate);
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-        .add(DoubleProperty('itemExtent', itemExtent, defaultValue: null));
-  }
-
-  // Helper method to compute the actual child count for the separated constructor.
-  static int _computeActualChildCount(int itemCount) {
-    return math.max(0, itemCount * 2 - 1);
-  }
 }

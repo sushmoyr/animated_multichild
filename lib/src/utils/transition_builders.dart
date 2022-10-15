@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-typedef TransitionBuilder = Widget Function(
+typedef ChildTransitionBuilder = Widget Function(
     BuildContext context, Animation<double> animation, Widget child);
+
+typedef IndexedChildTransitionBuilder = Widget Function(
+    BuildContext context, Animation<double> animation, Widget child, int index);
 
 Widget defaultTransitionBuilder(
     BuildContext context, Animation<double> animation, Widget child) {
@@ -58,7 +61,7 @@ class Transitions {
     );
   }
 
-  static TransitionBuilder combine(List<TransitionBuilder> builders) {
+  static ChildTransitionBuilder combine(List<ChildTransitionBuilder> builders) {
     return (context, animation, child) {
       Widget initial = child;
       for (var b in builders) {

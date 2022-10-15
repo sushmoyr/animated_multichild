@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedListView.builder(
+      body: AnimatedListView.separated(
         transitionBuilder: (ctx, animation, child) => SlideTransition(
           position: Tween(begin: const Offset(-1, 0), end: Offset.zero)
               .animate(animation),
@@ -60,13 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
         duration: const Duration(milliseconds: 500),
         itemBuilder: (BuildContext context, int index) {
           return Container(
-            margin: EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
             color: Colors.primaries[index],
             height: 100,
             width: double.maxFinite,
           );
         },
         itemCount: Colors.primaries.length,
+        separatorBuilder: (BuildContext context, int index) {
+          return Text('I am separator');
+        },
       ),
     );
   }

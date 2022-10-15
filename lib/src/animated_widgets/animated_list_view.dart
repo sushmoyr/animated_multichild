@@ -572,14 +572,14 @@ class AnimatedListViewWrapper extends BoxScrollView {
               widget = itemBuilder(context, itemIndex);
             } else {
               widget = separatorBuilder(context, itemIndex);
-              assert(() {
-                if (widget == null) {
-                  throw FlutterError('separatorBuilder cannot return null.');
-                }
-                return true;
-              }());
             }
-            return widget;
+            return AnimationContainer(
+              duration: duration,
+              curve: curve,
+              delay: delay * itemIndex,
+              builder: (context, animation) =>
+                  transitionBuilder(context, animation, widget),
+            );
           },
           findChildIndexCallback: findChildIndexCallback,
           childCount: _computeActualChildCount(itemCount),

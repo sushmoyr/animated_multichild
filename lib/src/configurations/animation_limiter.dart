@@ -20,12 +20,10 @@ class _AnimationLimiterState extends State<AnimationLimiter> {
   @override
   void initState() {
     super.initState();
-    print('Start ${DateTime.now()}');
     WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       if (!mounted) return;
       setState(() {
         _limitAnimation = widget.limit;
-        print('set limit at ${DateTime.now()}');
       });
     });
   }

@@ -45,9 +45,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    print(AnimationLimiter.shouldRunAnimation(context).toString());
     return Scaffold(
-      body: AnimatedListView(
+      body: AnimatedListView.builder(
         transitionBuilder: (ctx, animation, child) => SlideTransition(
           position: Tween(begin: const Offset(-1, 0), end: Offset.zero)
               .animate(animation),
@@ -57,17 +56,17 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         delay: kThemeChangeDuration,
-        duration: const Duration(milliseconds: 700),
-        children: Colors.primaries
-            .map(
-              (e) => Container(
-                margin: EdgeInsets.all(16),
-                color: e,
-                height: 100,
-                width: double.maxFinite,
-              ),
-            )
-            .toList(),
+        curve: Curves.bounceOut,
+        duration: const Duration(milliseconds: 500),
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            margin: EdgeInsets.all(16),
+            color: Colors.primaries[index],
+            height: 100,
+            width: double.maxFinite,
+          );
+        },
+        itemCount: Colors.primaries.length,
       ),
     );
   }

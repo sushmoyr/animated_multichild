@@ -515,7 +515,17 @@ class AnimatedListViewWrapper extends BoxScrollView {
           'You can only pass itemExtent or prototypeItem, not both.',
         ),
         childrenDelegate = SliverChildBuilderDelegate(
-          itemBuilder,
+          (BuildContext context, int index) {
+            final Widget child = itemBuilder(context, index);
+            return AnimationContainer(
+              duration: duration,
+              curve: curve,
+              delay: delay * index,
+              builder: (BuildContext context, Animation<double> animation) {
+                return transitionBuilder(context, animation, child);
+              },
+            );
+          },
           findChildIndexCallback: findChildIndexCallback,
           childCount: itemCount,
           addAutomaticKeepAlives: addAutomaticKeepAlive,

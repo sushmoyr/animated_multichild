@@ -47,17 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedListView.separated(
-        transitionBuilder: (ctx, animation, child) => SlideTransition(
-          position: Tween(begin: const Offset(-1, 0), end: Offset.zero)
-              .animate(animation),
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        ),
+        transitionBuilder: Transitions.combine([
+          // Transitions.slideInFromLeft,
+          Transitions.fadeIn,
+          Transitions.slideInFromBottom,
+        ]),
         delay: kThemeChangeDuration,
-        curve: Curves.bounceOut,
-        duration: const Duration(milliseconds: 500),
+        curve: Curves.decelerate,
+        duration: const Duration(milliseconds: 300),
         itemBuilder: (BuildContext context, int index) {
           return Container(
             margin: const EdgeInsets.all(16),

@@ -1,5 +1,5 @@
 import 'package:animated_multichild/src/configurations/animation_container.dart';
-import 'package:animated_multichild/src/utils/constants.dart';
+import 'package:animated_multichild/src/utils/transition_builders.dart';
 
 import '../configurations/animation_limiter.dart';
 import '../utils/extensions.dart';

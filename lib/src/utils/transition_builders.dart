@@ -6,6 +6,10 @@ typedef ChildTransitionBuilder = Widget Function(
 typedef IndexedChildTransitionBuilder = Widget Function(
     BuildContext context, Animation<double> animation, Widget child, int index);
 
+const Duration kChildAnimationDuration = Duration(milliseconds: 300);
+const Duration kChildAnimationDelay = Duration(milliseconds: 40);
+const Curve kChildAnimationCurve = Curves.linear;
+
 Widget defaultTransitionBuilder(
     BuildContext context, Animation<double> animation, Widget child) {
   return FadeTransition(
@@ -15,6 +19,19 @@ Widget defaultTransitionBuilder(
 }
 
 class Transitions {
+  static const ChildTransitionBuilder defaultTransitionVertical =
+      _verticalCombination;
+  static const ChildTransitionBuilder defaultTransitionHorizontal =
+      _horizontalCombination;
+
+  static Widget _verticalCombination(BuildContext context, animation, child) {
+    return combine([fadeIn, slideInFromBottom]).call(context, animation, child);
+  }
+
+  static Widget _horizontalCombination(BuildContext context, animation, child) {
+    return combine([fadeIn, slideInFromRight]).call(context, animation, child);
+  }
+
   static Widget fadeIn(
       BuildContext context, Animation<double> animation, Widget child) {
     return Opacity(

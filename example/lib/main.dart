@@ -26,32 +26,66 @@ class MyApp extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (_) => ListViewPage(title: 'title')),
+                          builder: (_) => const ListViewPage(title: 'title')),
                     );
                   },
-                  child: Text('Animated ListView'),
+                  child: const Text('Animated ListView'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => ColumnPage()),
+                      MaterialPageRoute(builder: (_) => const ColumnPage()),
                     );
                   },
-                  child: Text('Animated Column'),
+                  child: const Text('Animated Column'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => RowPage()),
+                      MaterialPageRoute(builder: (_) => const RowPage()),
                     );
                   },
-                  child: Text('Animated Row'),
+                  child: const Text('Animated Row'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const GridPage()),
+                    );
+                  },
+                  child: const Text('Animated Grid'),
                 ),
               ],
             ),
           ),
         );
       }),
+    );
+  }
+}
+
+class GridPage extends StatelessWidget {
+  const GridPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Animated Grid'),
+      ),
+      body: AnimatedGridView.extent(
+        padding: const EdgeInsets.all(16),
+        transitionBuilder:
+            Transitions.combine([Transitions.scale, Transitions.fadeIn]),
+        curve: Curves.ease,
+        maxCrossAxisExtent: 150,
+        children: [
+          for (int i = 0; i < 30; i++)
+            Card(
+              elevation: 4,
+            )
+        ],
+      ),
     );
   }
 }
@@ -63,17 +97,17 @@ class ColumnPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Animated Column'),
+        title: const Text('Animated Column'),
       ),
       body: AnimatedColumn(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           for (int i = 0; i < 5; i++)
-            SizedBox(
+            const SizedBox(
               width: double.infinity,
               height: 100,
               child: Card(
-                margin: const EdgeInsets.all(8),
+                margin: EdgeInsets.all(8),
                 elevation: 4,
               ),
             )
@@ -90,16 +124,16 @@ class RowPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Animated Row'),
+        title: const Text('Animated Row'),
       ),
       body: AnimatedRow(
         children: [
           for (int i = 0; i < 5; i++)
-            SizedBox(
+            const SizedBox(
               width: 64,
               height: 64,
               child: Card(
-                margin: const EdgeInsets.all(8),
+                margin: EdgeInsets.all(8),
                 elevation: 4,
               ),
             ),
@@ -143,11 +177,11 @@ class _ListViewPageState extends State<ListViewPage> {
         curve: Curves.ease,
         duration: const Duration(milliseconds: 375),
         itemBuilder: (BuildContext context, int index) {
-          return SizedBox(
+          return const SizedBox(
             width: double.infinity,
             height: 100,
             child: Card(
-              margin: const EdgeInsets.all(8),
+              margin: EdgeInsets.all(8),
               elevation: 4,
             ),
           );

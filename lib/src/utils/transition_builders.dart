@@ -6,8 +6,8 @@ typedef ChildTransitionBuilder = Widget Function(
 typedef IndexedChildTransitionBuilder = Widget Function(
     BuildContext context, Animation<double> animation, Widget child, int index);
 
-const Duration kChildAnimationDuration = Duration(milliseconds: 300);
-const Duration kChildAnimationDelay = Duration(milliseconds: 40);
+const Duration kChildAnimationDuration = Duration(milliseconds: 255);
+const Duration kChildAnimationDelay = Duration(milliseconds: 25);
 const Curve kChildAnimationCurve = Curves.linear;
 
 Widget defaultTransitionBuilder(

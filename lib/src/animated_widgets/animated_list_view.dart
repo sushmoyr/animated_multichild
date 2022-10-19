@@ -194,7 +194,7 @@ class AnimatedListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimationLimiter(child: _child);
+    return AnimationStopper(child: _child);
   }
 
   List<Widget> _mapChildren(List<Widget> children) {

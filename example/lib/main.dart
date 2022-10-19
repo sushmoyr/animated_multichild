@@ -102,7 +102,7 @@ class ColumnPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // const gap = SizedBox(height: 16);
+    const gap = SizedBox(height: 16);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -115,15 +115,13 @@ class ColumnPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Expanded(
-              child: SizedBox(
-                height: double.maxFinite,
-                width: double.maxFinite,
+              child: Center(
                 child: Card(
                   elevation: 4,
                 ),
               ),
             ),
-            // gap,
+            gap,
             Expanded(
               child: Row(
                 children: const [
@@ -142,15 +140,15 @@ class ColumnPage extends StatelessWidget {
                 ],
               ),
             ),
-            // gap,
-            Expanded(
+            gap,
+            const Expanded(
               child: SizedBox(
                 height: double.maxFinite,
                 width: double.maxFinite,
                 child: Card(elevation: 4),
               ),
             ),
-            // gap,
+            gap,
             Expanded(
               child: Row(
                 children: const [

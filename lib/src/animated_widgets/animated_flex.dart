@@ -33,7 +33,7 @@ class AnimatedColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimationLimiter(
+    return AnimationStopper(
       child: AnimatedFlexWrapper(
         key: key,
         mainAxisAlignment: mainAxisAlignment,
@@ -85,7 +85,7 @@ class AnimatedRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimationLimiter(
+    return AnimationStopper(
       child: AnimatedFlexWrapper(
         key: key,
         mainAxisAlignment: mainAxisAlignment,

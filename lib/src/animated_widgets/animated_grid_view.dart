@@ -290,7 +290,7 @@ class AnimatedGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimationLimiter(
+    return AnimationStopper(
       child: _child,
     );
   }

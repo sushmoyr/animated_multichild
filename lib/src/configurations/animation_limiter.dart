@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
-class AnimationLimiter extends StatefulWidget {
-  const AnimationLimiter({Key? key, required this.child, this.limit = true})
+class AnimationStopper extends StatefulWidget {
+  const AnimationStopper(
+      {Key? key, required this.child, this.stopAnimation = true})
       : super(key: key);
 
   final Widget child;
-  final bool limit;
+  final bool stopAnimation;
 
   @override
-  State<AnimationLimiter> createState() => _AnimationLimiterState();
+  State<AnimationStopper> createState() => _AnimationStopperState();
 
   static bool shouldRunAnimation(BuildContext context) =>
       _AnimationLimiterProvider.of(context)?.shouldRunAnimation ?? true;
 }
 
-class _AnimationLimiterState extends State<AnimationLimiter> {
-  bool _limitAnimation = false;
+class _AnimationStopperState extends State<AnimationStopper> {
+  bool _stopAnimation = false;
 
   @override
   void initState() {
@@ -23,7 +24,7 @@ class _AnimationLimiterState extends State<AnimationLimiter> {
     WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       if (!mounted) return;
       setState(() {
-        _limitAnimation = widget.limit;
+        _stopAnimation = widget.stopAnimation;
       });
     });
   }
@@ -31,7 +32,7 @@ class _AnimationLimiterState extends State<AnimationLimiter> {
   @override
   Widget build(BuildContext context) {
     return _AnimationLimiterProvider(
-      shouldRunAnimation: !_limitAnimation,
+      shouldRunAnimation: !_stopAnimation,
       child: widget.child,
     );
   }

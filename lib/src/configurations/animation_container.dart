@@ -33,7 +33,7 @@ class _AnimationContainerState extends State<AnimationContainer>
     _animationController =
         AnimationController(vsync: this, duration: widget.duration);
 
-    bool shouldRunAnimation = AnimationLimiter.shouldRunAnimation(context);
+    bool shouldRunAnimation = AnimationStopper.shouldRunAnimation(context);
 
     // print(
     //     'Run animation of duration ${widget.duration} with delay: ${widget.delay}');

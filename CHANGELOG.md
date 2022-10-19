@@ -1,3 +1,3 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+- Initial Release with support for **AnimatedListView, AnimatedColumn, AnimatedRow, AnimatedGrid**

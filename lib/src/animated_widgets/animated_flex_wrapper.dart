@@ -22,19 +22,36 @@ class AnimatedFlexWrapper extends Flex {
     List<Widget> children = const <Widget>[],
   }) : super(
           direction: direction,
-          children: children
-              .mapIndexed<Widget>(
-                (element, index) => AnimationContainer(
-                  duration: duration,
-                  curve: curve,
-                  delay: delay * index,
-                  builder: (context, animation) {
-                    return indexedChildTransitionBuilder?.call(
-                            context, animation, element, index) ??
-                        transitionBuilder(context, animation, element);
-                  },
-                ),
-              )
-              .toList(),
+          children: children.mapIndexed<Widget>(
+            (element, index) {
+              Widget child = element;
+              if (element is Flexible) {
+                child = element.child;
+              }
+
+              Widget parent = AnimationContainer(
+                duration: duration,
+                curve: curve,
+                delay: delay * index,
+                builder: (context, animation) {
+                  return indexedChildTransitionBuilder?.call(
+                          context, animation, child, index) ??
+                      transitionBuilder(context, animation, child);
+                },
+              );
+
+              if (element is Flexible) {
+                parent = Flexible(
+                  key: element.key,
+                  flex: element.flex,
+                  fit: element.fit,
+                  child: parent,
+                );
+              }
+              print('Child type: ${child.runtimeType}');
+              print('Parent type: ${parent.runtimeType}');
+              return parent;
+            },
+          ).toList(),
         );
 }

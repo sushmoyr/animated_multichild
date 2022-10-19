@@ -10,14 +10,6 @@ const Duration kChildAnimationDuration = Duration(milliseconds: 255);
 const Duration kChildAnimationDelay = Duration(milliseconds: 25);
 const Curve kChildAnimationCurve = Curves.linear;
 
-Widget defaultTransitionBuilder(
-    BuildContext context, Animation<double> animation, Widget child) {
-  return FadeTransition(
-    opacity: animation,
-    child: child,
-  );
-}
-
 class Transitions {
   static const ChildTransitionBuilder defaultTransitionVertical =
       _verticalCombination;

@@ -2,11 +2,11 @@ import 'package:animated_multichild/animated_multichild.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Gallery());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Gallery extends StatelessWidget {
+  const Gallery({super.key});
 
   // This widget is the root of your application.
   @override
@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
+                  key: ValueKey('list'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
                   child: const Text('Animated ListView'),
                 ),
                 ElevatedButton(
+                  key: ValueKey('column'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const ColumnPage()),
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
                   child: const Text('Animated Column'),
                 ),
                 ElevatedButton(
+                  key: ValueKey('row'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const RowPage()),
@@ -48,6 +51,7 @@ class MyApp extends StatelessWidget {
                   child: const Text('Animated Row'),
                 ),
                 ElevatedButton(
+                  key: ValueKey('grid'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const GridPage()),
@@ -70,20 +74,23 @@ class GridPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('Animated Grid'),
       ),
-      body: AnimatedGridView.extent(
+      body: AnimatedGridView.count(
         padding: const EdgeInsets.all(16),
         transitionBuilder:
             Transitions.combine([Transitions.scale, Transitions.fadeIn]),
         curve: Curves.ease,
-        maxCrossAxisExtent: 150,
+        crossAxisCount: 3,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
         children: [
           for (int i = 0; i < 30; i++)
-            Card(
+            const Card(
               elevation: 4,
-            )
+            ),
         ],
       ),
     );
@@ -95,23 +102,81 @@ class ColumnPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // const gap = SizedBox(height: 16);
+
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('Animated Column'),
       ),
-      body: AnimatedColumn(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          for (int i = 0; i < 5; i++)
-            const SizedBox(
-              width: double.infinity,
-              height: 100,
-              child: Card(
-                margin: EdgeInsets.all(8),
-                elevation: 4,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: AnimatedColumn(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Expanded(
+              child: SizedBox(
+                height: double.maxFinite,
+                width: double.maxFinite,
+                child: Card(
+                  elevation: 4,
+                ),
               ),
-            )
-        ],
+            ),
+            // gap,
+            Expanded(
+              child: Row(
+                children: const [
+                  Expanded(
+                    child: SizedBox(
+                      height: double.maxFinite,
+                      child: Card(elevation: 4),
+                    ),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: double.maxFinite,
+                      child: Card(elevation: 4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // gap,
+            Expanded(
+              child: SizedBox(
+                height: double.maxFinite,
+                width: double.maxFinite,
+                child: Card(elevation: 4),
+              ),
+            ),
+            // gap,
+            Expanded(
+              child: Row(
+                children: const [
+                  Expanded(
+                    child: SizedBox(
+                      height: double.maxFinite,
+                      child: Card(elevation: 4),
+                    ),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: double.maxFinite,
+                      child: Card(elevation: 4),
+                    ),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: double.maxFinite,
+                      child: Card(elevation: 4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -123,6 +188,7 @@ class RowPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('Animated Row'),
       ),
@@ -155,7 +221,7 @@ class _ListViewPageState extends State<ListViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.grey.shade400,
+      backgroundColor: Colors.grey.shade100,
       body: AnimatedListView.builder(
         // indexedChildTransitionBuilder: (context, animation, child, index) {
         //   return index.isEven
@@ -187,9 +253,6 @@ class _ListViewPageState extends State<ListViewPage> {
           );
         },
         itemCount: 16,
-        // separatorBuilder: (BuildContext context, int index) {
-        //   return Text('I am separator');
-        // },
       ),
     );
   }

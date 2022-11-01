@@ -48,8 +48,6 @@ class AnimatedFlexWrapper extends Flex {
                   child: parent,
                 );
               }
-              print('Child type: ${child.runtimeType}');
-              print('Parent type: ${parent.runtimeType}');
               return parent;
             },
           ).toList(),

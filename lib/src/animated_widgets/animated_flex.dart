@@ -2,7 +2,7 @@ import 'package:animated_multichild/animated_multichild.dart';
 import 'package:animated_multichild/src/animated_widgets/animated_flex_wrapper.dart';
 import 'package:flutter/material.dart';
 
-import '../configurations/animation_limiter.dart';
+import '../configurations/animation_stopper.dart';
 
 class AnimatedColumn extends StatelessWidget {
   /// Creates a vertical array of children which are animated automatically.
@@ -253,6 +253,7 @@ class AnimatedRow extends StatelessWidget {
   final TextBaseline? textBaseline;
 
   final List<Widget> children;
+
   /// Transition Duration of each child
   final Duration duration;
 

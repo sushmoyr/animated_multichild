@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:animated_multichild/src/configurations/animation_limiter.dart';
+import 'package:animated_multichild/src/configurations/animation_stopper.dart';
 import 'package:flutter/material.dart';
 
 class AnimationContainer extends StatefulWidget {

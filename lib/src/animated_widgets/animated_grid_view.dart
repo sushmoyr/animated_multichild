@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../configurations/animation_container.dart';
 import '../utils/extensions.dart';
 import '../utils/transition_builders.dart';
-import '../configurations/animation_limiter.dart';
+import '../configurations/animation_stopper.dart';
 
 class AnimatedGridView extends StatelessWidget {
   /// Creates a scrollable, 2D array of widgets with a custom

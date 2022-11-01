@@ -23,7 +23,7 @@ class Gallery extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  key: ValueKey('list'),
+                  key: const ValueKey('list'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -33,7 +33,7 @@ class Gallery extends StatelessWidget {
                   child: const Text('Animated ListView'),
                 ),
                 ElevatedButton(
-                  key: ValueKey('column'),
+                  key: const ValueKey('column'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const ColumnPage()),
@@ -42,7 +42,7 @@ class Gallery extends StatelessWidget {
                   child: const Text('Animated Column'),
                 ),
                 ElevatedButton(
-                  key: ValueKey('row'),
+                  key: const ValueKey('row'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const RowPage()),
@@ -51,7 +51,7 @@ class Gallery extends StatelessWidget {
                   child: const Text('Animated Row'),
                 ),
                 ElevatedButton(
-                  key: ValueKey('grid'),
+                  key: const ValueKey('grid'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const GridPage()),
@@ -116,8 +116,10 @@ class ColumnPage extends StatelessWidget {
           children: [
             const Expanded(
               child: Center(
-                child: Card(
-                  elevation: 4,
+                child: SizedBox.expand(
+                  child: Card(
+                    elevation: 4,
+                  ),
                 ),
               ),
             ),

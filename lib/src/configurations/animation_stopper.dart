@@ -12,7 +12,7 @@ class AnimationStopper extends StatefulWidget {
   State<AnimationStopper> createState() => _AnimationStopperState();
 
   static bool shouldRunAnimation(BuildContext context) =>
-      _AnimationLimiterProvider.of(context)?.shouldRunAnimation ?? true;
+      _AnimationStopperProvider.of(context)?.shouldRunAnimation ?? true;
 }
 
 class _AnimationStopperState extends State<AnimationStopper> {
@@ -31,17 +31,17 @@ class _AnimationStopperState extends State<AnimationStopper> {
 
   @override
   Widget build(BuildContext context) {
-    return _AnimationLimiterProvider(
+    return _AnimationStopperProvider(
       shouldRunAnimation: !_stopAnimation,
       child: widget.child,
     );
   }
 }
 
-class _AnimationLimiterProvider extends InheritedWidget {
+class _AnimationStopperProvider extends InheritedWidget {
   final bool shouldRunAnimation;
 
-  const _AnimationLimiterProvider({
+  const _AnimationStopperProvider({
     required this.shouldRunAnimation,
     required super.child,
   });
@@ -51,7 +51,7 @@ class _AnimationLimiterProvider extends InheritedWidget {
     return false;
   }
 
-  static _AnimationLimiterProvider? of(BuildContext context) {
-    return context.findAncestorWidgetOfExactType<_AnimationLimiterProvider>();
+  static _AnimationStopperProvider? of(BuildContext context) {
+    return context.findAncestorWidgetOfExactType<_AnimationStopperProvider>();
   }
 }

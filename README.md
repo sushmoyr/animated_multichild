@@ -8,7 +8,9 @@ Create ListView, GridView, Row or Column whose children are animated easily.
 
 Here is an example video of the widgets.
 
-TODO: Add video url here
+
+https://user-images.githubusercontent.com/34061341/200101717-a9f1283b-ce78-4334-82af-03808a886728.mp4
+
 
 ## Getting started
 

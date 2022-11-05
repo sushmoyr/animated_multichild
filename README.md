@@ -6,24 +6,102 @@ Create ListView, GridView, Row or Column whose children are animated easily.
 
 ## Showcase
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+Here is an example video of the widgets.
+
+TODO: Add video url here
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add `animated_multichild` to `pubspec.yaml` of your project.
+
+```yaml
+    dependencies:
+      animated_multichild: ^0.1.0
+```
+
+Or use the below command to install it with your terminal.
+
+```shell
+flutter pub add animated_multichild
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Import it in your Dart code:
 
 ```dart
-const like = 'sample';
+import 'package:animated_multichild/animated_multichild.dart';
 ```
 
-## Additional information
+#### ListView
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Replace ListView with AnimatedListView. You can also use `builder` and `separated` constructors. But 
+`custom` constructor is not available
+
+```dart
+  AnimatedListView.builder(
+    itemBuilder: (BuildContext context, int index) {
+      return const SizedBox(
+        width: double.infinity,
+        height: 100,
+        child: Card(
+          margin: EdgeInsets.all(8),
+          elevation: 4,
+        ),
+      );
+    },
+    itemCount: 16,
+  )
+```
+
+See the example folder to view examples for other widgets.
+
+#### Transitions
+
+You can customize how the animation is built via the `transitionBuilder` property.
+
+```dart
+/// This will create a fade effect for the children
+  AnimatedListView.builder(
+    transitionBuilder: (context, animation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+    /// rest of your code
+  )
+```
+
+There are some pre-defined transitions available via the `Transitions` class. They are
+
+- `fadeIn`
+- `scale`
+- `slideInFromLeft`
+- `slideInFromRight`
+- `slideInFromBottom`
+
+The `Transitions` class also has a `combine` method which takes a list of transition builders to combine
+multiple transitions into one transition.
+
+Along with `transitionBuilder`, there are another functions which passes the index of the child widget
+to the transition builder. This is known as `IndexedTransitionBuilder`. This is helpful to apply different 
+transitions to different widgets based on the index.
+
+#### Duration and Delay
+
+You can customize the duration of the animation and starting delay of the animation.
+
+The `duration` parameter takes in a `Duration` which defines how long the animation should run.
+
+The `delay` parameter takes in a `Duration` which defines the starting delay of the of the animation. 
+Remember that this delay is incremental. This is used to apply staggered animation effect. If you don't 
+want staggered animation effect than set this delay to `Duration.zero`.
+
+Also to customize the delay of the animation without staggered effect, you can define a 
+[CurvedAnimation](https://api.flutter.dev/flutter/animation/CurvedAnimation-class.html) with an 
+[Interval](https://api.flutter.dev/flutter/animation/Interval-class.html) curve to the transition builder.
+
+## License
+
+[MIT License](https://github.com/sushmoyr/animated_multichild/blob/main/LICENSE)

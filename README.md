@@ -18,7 +18,7 @@ Add `animated_multichild` to `pubspec.yaml` of your project.
 
 ```yaml
     dependencies:
-      animated_multichild: ^0.1.0
+      animated_multichild: ^0.0.1
 ```
 
 Or use the below command to install it with your terminal.

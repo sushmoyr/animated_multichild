@@ -1,5 +1,5 @@
 name: animated_multichild
-description: A new Flutter project.
+description: Create ListView, GridView, Row or Column whose children are animated easily.
 version: 0.0.1
 homepage: https://github.com/sushmoyr/animated_multichild/
 repository: https://github.com/sushmoyr/animated_multichild/

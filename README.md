@@ -5,22 +5,17 @@
 Create ListView, GridView, Row or Column whose children are animated easily.
 
 ## Showcase
-
-#### Row
-
-[AnimatedRow](./resources/row.gif)
-
-#### Column
-
-[AnimatedColumn](./resources/column.gif)
-
-#### Grid
-
-[AnimatedGridView](./resources/grid.gif)
-
-#### List
-
-[AnimatedListView](./resources/list_view.gif)
+<!--
+<p float="left">
+  <img src="./resources/row.gif" width="400" />
+  <img src="./resources/column.gif" width="400" /> 
+  <img src="./resources/grid.gif" width="200" />
+  <img src="./resources/list_view.gif" width="200" />
+</p> -->
+    
+|           Row              |            Column          |           Grid             |             List
+|:--------------------------:|:--------------------------:|:--------------------------:|:--------------------------:
+|![](./resources/row.gif)    |![](./resources/column.gif) |![](./resources/grid.gif)   |![](./resources/list_view.gif) |
 
 ## Getting started
 

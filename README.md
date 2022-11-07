@@ -13,9 +13,9 @@ Create ListView, GridView, Row or Column whose children are animated easily.
   <img src="./resources/list_view.gif" width="200" />
 </p> -->
     
-|           Row              |            Column          |           Grid             |             List
-|:--------------------------:|:--------------------------:|:--------------------------:|:--------------------------:
-|![](./resources/row.gif)    |![](./resources/column.gif) |![](./resources/grid.gif)   |![](./resources/list_view.gif) |
+|           Row            |           Column            |           Grid            |              List              |
+|:------------------------:|:---------------------------:|:-------------------------:|:------------------------------:|
+| ![](./resources/row.gif) | ![](./resources/column.gif) | ![](./resources/grid.gif) | ![](./resources/list_view.gif) |
 
 ## Getting started
 

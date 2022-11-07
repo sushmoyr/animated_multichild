@@ -6,11 +6,9 @@ Create ListView, GridView, Row or Column whose children are animated easily.
 
 ## Showcase
 
-Here is an example video of the widgets.
+Here is an example of the widgets.
 
-
-https://user-images.githubusercontent.com/34061341/200101717-a9f1283b-ce78-4334-82af-03808a886728.mp4
-
+[example gif](./resources/showcase.gif)
 
 ## Getting started
 
@@ -18,7 +16,7 @@ Add `animated_multichild` to `pubspec.yaml` of your project.
 
 ```yaml
     dependencies:
-      animated_multichild: ^0.0.1
+      animated_multichild: ^0.0.2
 ```
 
 Or use the below command to install it with your terminal.

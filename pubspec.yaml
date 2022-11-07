@@ -1,6 +1,6 @@
 name: animated_multichild
 description: Create ListView, GridView, Row or Column whose children are animated easily.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/sushmoyr/animated_multichild/
 repository: https://github.com/sushmoyr/animated_multichild/
 

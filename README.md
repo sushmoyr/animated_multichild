@@ -6,9 +6,21 @@ Create ListView, GridView, Row or Column whose children are animated easily.
 
 ## Showcase
 
-Here is an example of the widgets.
+#### Row
 
-[example gif](./resources/showcase.gif)
+[AnimatedRow](./resources/row.gif)
+
+#### Column
+
+[AnimatedColumn](./resources/column.gif)
+
+#### Grid
+
+[AnimatedGridView](./resources/grid.gif)
+
+#### List
+
+[AnimatedListView](./resources/list_view.gif)
 
 ## Getting started
 
